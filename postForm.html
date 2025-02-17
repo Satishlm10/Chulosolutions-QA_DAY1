@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Validation</title>
+ 
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+       
+        .error { 
+            color: red; 
+            font-size: 14px; 
+            display: none; 
+            margin-top: 5px; 
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-6">
+
+    <div class="w-full bg-white shadow-md py-4">
+        <!-- Navigation Bar -->
+        <nav class="max-w-7xl mx-auto flex justify-center space-x-8">
+            <a href="index.html" class="text-green-600 hover:text-green-800 text-lg font-medium">Home</a>
+            <a href="getImage.html" class="text-green-600 hover:text-green-800 text-lg font-medium">Get Image - Get Method</a>
+            <a href="postForm.html" class="text-green-600 hover:text-green-800 text-lg font-medium">Sign In - Post Method</a>
+        </nav>
+    </div>
+
+    <br>
+
+    <form id="myForm" onsubmit="return validateForm()" method="post" class="w-full max-w-md mx-auto p-6 bg-white shadow-lg rounded-lg">
+       
+        <label for="name" class="block text-sm font-medium text-gray-700">Name:</label>
+        <input type="text" id="name" class="mt-1 p-2 w-full border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600">
+        <span class="error" id="nameError">Name cannot be empty</span>
+        
+       
+        <label for="username" class="block mt-4 text-sm font-medium text-gray-700">Username:</label>
+        <input type="text" id="username" class="mt-1 p-2 w-full border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600">
+        <span class="error" id="usernameError">Username must be at least 4 characters</span>
+
+        
+        <label for="email" class="block mt-4 text-sm font-medium text-gray-700">Email:</label>
+        <input type="text" id="email" class="mt-1 p-2 w-full border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600">
+        <span class="error" id="emailError">Invalid email format</span>
+
+       
+        <label for="password" class="block mt-4 text-sm font-medium text-gray-700">Password:</label>
+        <input type="password" id="password" class="mt-1 p-2 w-full border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600">
+        <span class="error" id="passwordError">Password must have uppercase, lowercase, special symbol, and a number</span>
+
+        <label for="contact" class="block mt-4 text-sm font-medium text-gray-700">Contact Number:</label>
+        <input type="text" id="contact" class="mt-1 p-2 w-full border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600">
+        <span class="error" id="contactError">Invalid contact number</span>
+
+        
+        <button type="submit" class="mt-6 p-2 bg-indigo-600 text-white rounded-md w-full hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-600">Submit</button>
+    </form>
+
+   
+    <div id="formOutput" style="display: none;" class="mt-6 p-6 bg-white shadow-lg rounded-lg max-w-md mx-auto">
+        <h3 class="text-xl font-semibold">Submitted Form Data:</h3>
+        <p id="displayName" class="mt-2 text-sm font-medium text-gray-700"></p>
+        <p id="displayUsername" class="mt-2 text-sm font-medium text-gray-700"></p>
+        <p id="displayEmail" class="mt-2 text-sm font-medium text-gray-700"></p>
+        <p id="displayPassword" class="mt-2 text-sm font-medium text-gray-700"></p>
+        <p id="displayContact" class="mt-2 text-sm font-medium text-gray-700"></p>
+    </div>
+
+    <script>
+        function validateForm() {
+            let name = document.getElementById('name').value.trim();
+            let username = document.getElementById('username').value.trim();
+            let email = document.getElementById('email').value.trim();
+            let password = document.getElementById('password').value.trim();
+            let contact = document.getElementById('contact').value.trim();
+            let isValid = true;
+
+           
+            if (name === "") {
+                document.getElementById("nameError").style.display = "inline";
+                isValid = false;
+            } else {
+                document.getElementById("nameError").style.display = "none";
+            }
+
+         
+            if (username.length < 4) {
+                document.getElementById("usernameError").style.display = "inline";
+                isValid = false;
+            } else {
+                document.getElementById("usernameError").style.display = "none";
+            }
+
+          
+            let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                document.getElementById("emailError").style.display = "inline";
+                isValid = false;
+            } else {
+                document.getElementById("emailError").style.display = "none";
+            }
+
+          
+            let passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/;
+            if (!passwordPattern.test(password)) {
+                document.getElementById("passwordError").style.display = "inline";
+                isValid = false;
+            } else {
+                document.getElementById("passwordError").style.display = "none";
+            }
+
+          
+            let contactPattern = /^(98\d{8}|01\d{5})$/;
+            if (!contactPattern.test(contact)) {
+                document.getElementById("contactError").style.display = "inline";
+                isValid = false;
+            } else {
+                document.getElementById("contactError").style.display = "none";
+            }
+
+            if (isValid) {
+                alert("Form submitted successfully!");
+                document.getElementById("formOutput").setAttribute('data-name', name);
+                document.getElementById("formOutput").setAttribute('data-username', username);
+                document.getElementById("formOutput").setAttribute('data-email', email);
+                document.getElementById("formOutput").setAttribute('data-password', password);
+                document.getElementById("formOutput").setAttribute('data-contact', contact);
+
+                document.getElementById("displayName").textContent = "Name: " + document.getElementById("formOutput").getAttribute('data-name');
+                document.getElementById("displayUsername").textContent = "Username: " + document.getElementById("formOutput").getAttribute('data-username');
+                document.getElementById("displayEmail").textContent = "Email: " + document.getElementById("formOutput").getAttribute('data-email');
+                document.getElementById("displayPassword").textContent = "Password: " + document.getElementById("formOutput").getAttribute('data-password');
+                document.getElementById("displayContact").textContent = "Contact: " + document.getElementById("formOutput").getAttribute('data-contact');
+
+                document.getElementById("formOutput").style.display = "block";
+                return false;
+            }
+            return isValid;
+        }
+    </script>
+
+</body>
+</html>
